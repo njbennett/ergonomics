@@ -1,6 +1,11 @@
 #!/bin/bash
 
-set -eux
+set -ux
+
+function get_total_brews() {
+  length="$(yaml read ./manifest.yml homebrew.*.brew | wc -l | tr -d '[:space:]')"
+  total_brews="$(expr $length - 1)"
+}
 
 function get_brew() {
   brew="$(yaml read ./manifest.yml homebrew[$1].brew)"
@@ -10,10 +15,13 @@ function get_cask() {
   cask="$(yaml read ./manifest.yml homebrew[$1].cask)"
 }
 
-brew update
+get_total_brews
 
-get_brew 0
-get_cask 0
-brew install "${cask}/tap/${brew}"
-brew upgrade "${brew}"
+for i in $(eval echo "{0..$total_brews}")
+do
+  get_brew $i
+  get_cask $i
+  brew install "${cask}/tap/${brew}"
+  brew upgrade "${brew}"
+done
 
