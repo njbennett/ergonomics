@@ -1,0 +1,4 @@
+---
+homebrew:
+  - brew: bosh-cli
+    cask: cloudfoundry
