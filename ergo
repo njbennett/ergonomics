@@ -1,6 +1,8 @@
 #!/bin/bash
 
 set -eux
+
 brew="$(yaml read ./manifest.yml homebrew[0].brew)"
 cask="$(yaml read ./manifest.yml homebrew[0].cask)"
 brew install "${cask}/tap/${brew}"
+brew upgrade "${brew}"
