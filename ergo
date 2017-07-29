@@ -2,9 +2,18 @@
 
 set -eux
 
+function get_brew() {
+  brew="$(yaml read ./manifest.yml homebrew[$1].brew)"
+}
+
+function get_cask() {
+  cask="$(yaml read ./manifest.yml homebrew[$1].cask)"
+}
+
 brew update
 
-brew="$(yaml read ./manifest.yml homebrew[0].brew)"
-cask="$(yaml read ./manifest.yml homebrew[0].cask)"
+get_brew 0
+get_cask 0
 brew install "${cask}/tap/${brew}"
 brew upgrade "${brew}"
+
